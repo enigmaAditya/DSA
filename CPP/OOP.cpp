@@ -15,6 +15,10 @@ public:
     }
 };
 
+class BankAccount {
+private:
+	double balance;
+};
 int main() {
     Dog dog;
     dog.speak();  // Inherited function
