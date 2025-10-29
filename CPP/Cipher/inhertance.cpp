@@ -36,7 +36,8 @@ public:
         cout << x << " deposited successfully. New balance: " << this->amount << endl;
     }
 
-    void withdraw(float x) {
+   virtual  void withdraw(float x) {
+        cout<<"withdraw of parent class"<<endl;
         if (x > this->amount) {
             cout << " Insufficient balance!" << endl;
             return;
@@ -133,9 +134,66 @@ int main() {
 
     b1.withdraw(500) ;
 
+    // example of dyanmic binding in cpp
+    BankAccount*c1 = new CurrentAccount("binding" , 5000) ;
+    c1->display();
+    c1->withdraw(1000) ;
 
 
+//Abstraction example
+    // BankAccount is an abstract class
+    // We cannot create an object of BankAccount directly
+    // But we can use pointers or references to it
+    BankAccount* acc1 = new SavingsAccount("D", 10000, 5);
+    acc1->display();
+    acc1->withdraw(2000);
+    delete acc1;
+//abstraction example
+    BankAccount* acc2 = new CurrentAccount("E", 8000);
+    acc2->display();
+    acc2->withdraw(3000);
+    delete acc2;
+//an abstract class
+    class AbstractAccount {
+    public:
+        virtual void showAccountType() = 0;                                     // pure virtual function
+    };
+    class ConcreteAccount : public AbstractAccount {
+    public:
+        void showAccountType() override {
+            cout << "This is a concrete account type." << endl;
+        }
+    };
+    ConcreteAccount concreteAcc;
+    concreteAcc.showAccountType(); 
 
+    // dynamic binding use in abstraction
+    AbstractAccount* acc = new ConcreteAccount();
+    acc->showAccountType();
+    delete acc;
+// new abstraction ex.
+    class Payment {
+    public:
+        virtual void processPay(float amount) = 0;                   // pure virtual function
+    };
+    class PhonePePayment : public Payment {
+    public:
+        void processPay(float amount) override {
+            cout << "Processing PhonePe payment of: " << amount << endl;
+        }
+    };
+    class PaytmPayment : public Payment {
+    public:
+        void processPay(float amount) override {
+            cout << "Processing Paytm payment of: " << amount << endl;
+        }
+    };
+    Payment* payment1 = new PhonePePayment();
+    payment1->processPay(150.75);
+    delete payment1;
+    Payment* payment2 = new PaytmPayment();
+    payment2->processPay(200.50);
+    delete payment2;
 
 
     return 0;
