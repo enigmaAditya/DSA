@@ -126,10 +126,33 @@ class LinkedList{
         delete curr;//explain: Free the memory of the node to be deleted.
     }//time complexity of above function is O(n)
 
+    void deleteAtPosition(int pos){//explain: This function deletes the node at the specified position in the linked list.
+        if(head == nullptr){//explain: If the list is empty, there's nothing to delete.
+            return;//explain: Exit the function as no deletion can be performed.
+        }
+        if(pos == 0){//explain: If the position is 0, we need to delete the head node.
+            Node* temp = head;//explain: Store the current head in a temporary pointer.
+            head = head->next;//explain: Update the head to point to the next node.
+            delete temp;//explain: Free the memory of the old head node.
+            return;//explain: Exit the function as the deletion is complete.
+        }
+        Node* curr = head;//explain: Start from the head of the list.
+        Node* prev = nullptr;//explain: Initialize a previous pointer to keep track of the node before the current one.
+        for(int i = 0; i < pos && curr != nullptr; i++){//explain: Traverse to the node at the specified position.
+            prev = curr;//explain: Move the previous pointer to the current node.
+            curr = curr->next;//explain: Move to the next node.
+        }
+        if(curr == nullptr){//explain: If we reached the end of the list before reaching the desired position.
+            return;//explain: Exit the function as there's nothing to delete.
+        }
+        prev->next = curr->next;//explain: Bypass the current node to remove it from the list.
+        delete curr;//explain: Free the memory of the node to be deleted.
+    }//time complexity of above function is O(n)
+
     //function to search a value in linked list
     bool search(int val){
         //also return the position of the value if found
-        Node* temp = head;
+        Node* temp = head;//explain: Start from the head of the list.
         int pos = 0;
         while(temp != nullptr){
             if(temp->data == val){
@@ -142,6 +165,48 @@ class LinkedList{
         return false;
     }
 
+    //reverse a linked list:
+    //leetcode 206:
+    void reverse(){
+        Node* prev = nullptr;
+        Node* curr = head;
+        Node* next = nullptr;
+        while(curr != nullptr){
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        head = prev;
+        // return head; (if function was non void)
+    }
+
+    //delete a node without access of head:
+    //leetcode 237:
+    void deleteNode(Node* nodeToDelete){
+        if(nodeToDelete == nullptr || nodeToDelete->next == nullptr){
+            return; //cannot delete the node
+        }
+        Node* temp = nodeToDelete->next;
+        nodeToDelete->data = temp->data;
+        nodeToDelete->next = temp->next;
+        delete temp;
+    }
+    
+    //leetcode 876:
+    Node* findMiddle(Node* head) {
+        if(head == nullptr){
+            return nullptr;
+        }
+        Node* slow = head;
+        Node* fast = head;
+        while(fast != nullptr && fast->next != nullptr){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow;
+    }
+
     //function to get length of linked list
     int length(){
         int len = 0;
@@ -152,7 +217,20 @@ class LinkedList{
         }
         return len;
     }
-
+    
+    int getvalueatindex(int index){
+        Node* temp = head;
+        int pos = 0;
+        while(temp != nullptr){
+            if(pos == index){
+                return temp->data;
+            }
+            temp = temp->next;
+            pos++;
+        }
+        //if index is out of bounds
+        throw out_of_range("Index out of bounds");
+    }
     //function to display the linked list
     void display(){
         Node* temp = head;
